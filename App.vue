@@ -1,22 +1,16 @@
 <template>
-  <h1>{{ msg }}</h1>
+  <todo-app></todo-app>
 </template>
 
 <script>
+import TodoApp from './components/TodoApp';
+
 export default {
-  data () {
-    return {
-      msg: 'hello vuew ?'
-    }
+  components: {
+    TodoApp
   }
 }
 </script>
 
 <style scoped lang="scss">
-$color: blue;
-  h1 {
-    color: $color;
-    text-decoration-line: underline;
-    display: flex;
-  }
 </style>
