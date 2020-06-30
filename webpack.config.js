@@ -1,9 +1,9 @@
-const path = require('path');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin') ;
-const merge = require('webpack-merge');
+const path = require('path')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const merge = require('webpack-merge')
 
 require('@babel/polyfill')
 
@@ -11,7 +11,7 @@ module.exports = (env, opts) => {
   const config = {
     // 중복되는옵션
     resolve: {
-      extensions: ['.vue','.js']
+      extensions: ['.vue', '.js']
     },
     entry: { // 진입점
       app: [
@@ -37,7 +37,7 @@ module.exports = (env, opts) => {
         {
           test: /\.css$/,
           use: [
-            'vue-style-loader', 
+            'vue-style-loader',
             'css-loader',
             'postcss-loader'
           ]
@@ -45,7 +45,7 @@ module.exports = (env, opts) => {
         {
           test: /\.scss$/,
           use: [
-            'vue-style-loader', 
+            'vue-style-loader',
             'css-loader',
             'postcss-loader',
             'sass-loader'
@@ -59,19 +59,19 @@ module.exports = (env, opts) => {
         template: path.join(__dirname, 'index.html')
       }),
       new CopyPlugin({
-        patterns :[{
+        patterns: [{
           from: 'assets/',
           to: ''
         }]
-      }),
-    ],
-  };
+      })
+    ]
+  }
 
-  if(opts.mode === 'development'){
+  if (opts.mode === 'development') {
     return merge(config, {
       devtool: 'eval',
       devServer: {
-        open:false,
+        open: false,
         hot: true
       }
     })
@@ -83,5 +83,4 @@ module.exports = (env, opts) => {
       ]
     })
   }
-
 }

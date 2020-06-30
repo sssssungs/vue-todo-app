@@ -4,12 +4,12 @@
 
 <script>
 export default {
-    data () {
-      return {
-        msg: 'hello vuew ?'
-      }
+  data () {
+    return {
+      msg: 'hello vuew ?'
     }
   }
+}
 </script>
 
 <style scoped lang="scss">
