@@ -45,14 +45,8 @@ export default {
     date () {
       const created = this.todo.createdAt.substring(0,10);
       const updated = this.todo.updatedAt.substring(0,10);
-      const isSame = created === updated
-      // console.log("isame", date, isSame)
-      if(isSame) {
-        return created;
-      }
-      else {
-        return `${created} (edited)`
-      }
+      const isSame = created === updated;
+      return isSame ? created : `${created} (edited)`;
     }
   },
   methods: {
@@ -60,7 +54,7 @@ export default {
       this.$emit('update-todo', this.todo, value)
     },
     onEditMode () {
-
+      this.isEditMode = !this.isEditMode
     },
     deleteTodo (value) {
       this.$emit('delete-todo', this.todo, value)
