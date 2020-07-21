@@ -1,5 +1,27 @@
 <template>
   <div class="todo-item">
+    <div 
+      class="item__inner item--edit"
+      v-if="isEditMode">
+      <input 
+        type="text" 
+        :value="editedTitle" 
+        @input="editedTitle=$event.target.value"
+        @keypress.enter="editedTodo"
+        @keypress.esc="offEditMode" />
+      <div class="item__actions">
+        <button 
+          key="complete" 
+          @click="editedTodo">완료</button>
+        <button 
+          key="cancel"
+          @click="offEditMode">취소</button>
+      </div>
+    </div>
+    <div 
+      class="item__inner item--normal"
+      v-else >
+    </div>
     <input 
       type="checkbox" 
       v-model="done"
@@ -28,7 +50,8 @@ export default {
   },
   data () {
     return {
-      isEditMode: false
+      isEditMode: false,
+      editedTitle: ''
     }
   },
   computed: {
@@ -54,7 +77,14 @@ export default {
       this.$emit('update-todo', this.todo, value)
     },
     onEditMode () {
-      this.isEditMode = !this.isEditMode
+      this.isEditMode = true; //!this.isEditMode
+      this.editedTitle = this.todo.title;
+    },
+    offEditMode () {
+      this.isEditMode = false;
+    },
+    editedTodo () {
+
     },
     deleteTodo (value) {
       this.$emit('delete-todo', this.todo, value)
