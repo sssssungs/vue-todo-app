@@ -11,7 +11,14 @@
           @click="showList('active')">Todo ({{todo}})</button>
         <button
           :class="{ active: filter === 'complete' }"
-          @click="showList('complete')">Complete ({{all-todo}})</button>
+          @click="showList('complete')">Complete ({{completed}})</button>
+      </div>
+      <div class="actions">
+        <input 
+          type="checkbox" 
+          v-model="allDone" />
+        <button
+          @click="deleteComplete">완료항목 삭제</button>
       </div>
     </div>
 
@@ -53,7 +60,8 @@ export default {
     return {
       db: null,
       todos: [],
-      filter: 'all'
+      filter: 'all',
+      // allDone: false
     }
   },
   created() {
@@ -70,6 +78,11 @@ export default {
         return this.todos.filter(v => v.done === false).length
       }
     },
+    completed: {
+      get () {
+        return this.todos.filter(v => v.done === true).length
+      }
+    },
     filteredTodo () {
       switch(this.filter) {
         case 'all':
@@ -80,6 +93,14 @@ export default {
           return this.todos.filter(v => v.done === true)
         default:
           return this.todos
+      }
+    },
+    allDone: {
+      get () {
+        return this.all === this.completed && this.all > 0
+      },
+      set (checked) {
+        this.completedAll(checked)
       }
     }
   },
@@ -141,6 +162,20 @@ export default {
     },
     showList (button) {
       this.filter = button;
+    },
+    completedAll (checked) {
+      const newTodos = this.db
+        .get('todos')
+        .forEach(v => { v.done = checked })
+        .write();
+      this.todos = _cloneDeep(newTodos);
+    },
+    deleteComplete () {
+      this.db
+        .get('todos')
+        .remove({done:true})
+        .write();
+      this.todos = this.todos.filter(v => v.done !== true)
     }
   },
 
