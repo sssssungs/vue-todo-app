@@ -1,10 +1,13 @@
 <template>
-  <div class="todo-item">
+  <div 
+    class="todo-item"
+    :class="{ done }">
     <div 
       class="item__inner item--edit"
       v-if="isEditMode">
       <input 
         type="text" 
+        ref="titleInput"
         :value="editedTitle" 
         @input="editedTitle=$event.target.value"
         @keypress.enter="editedTodo"
@@ -21,25 +24,28 @@
     <div 
       class="item__inner item--normal"
       v-else >
-    </div>
-    <input 
-      type="checkbox" 
-      v-model="done"
-    />
-    <div class="item__title-wrap">
-      <div class="item_title">
-        {{ todo.title }}
+      <input 
+        type="checkbox" 
+        v-model="done"
+      />
+      <div class="item__title-wrap">
+        <div class="item_title">
+          {{ todo.title }}
+        </div>
+      </div>
+      <div class="item__date">
+        {{ date }}
+      </div>
+      <div class="item__actions">
+        <button 
+          key="update"
+          @click="onEditMode">수정</button>
+        <button 
+          key="delete" 
+          @click="deleteTodo">삭제</button>
       </div>
     </div>
-    <div class="item__date">
-      {{ date }}
-    </div>
-    <div class="item__actions">
-      <button @click="onEditMode">Modify</button>
-      <button @click="deleteTodo">Delete</button>
-    </div>
-
-    </div>
+  </div>
 </template>
 
 <script>
@@ -66,9 +72,8 @@ export default {
       }
     },
     date () {
-      const created = this.todo.createdAt.substring(0,10);
-      const updated = this.todo.updatedAt.substring(0,10);
-      const isSame = created === updated;
+      const created = dayjs(this.todo.createdAt).format('YYYY/MM/DD');
+      const isSame = dayjs(this.todo.createdAt).isSame(dayjs(this.todo.updatedAt));
       return isSame ? created : `${created} (edited)`;
     }
   },
@@ -79,12 +84,22 @@ export default {
     onEditMode () {
       this.isEditMode = true; //!this.isEditMode
       this.editedTitle = this.todo.title;
+      // dom 이 렌더링 된 다음에 실행이 되는것을 보장
+      this.$nextTick(() => {
+        this.$refs.titleInput.focus();
+      })
     },
     offEditMode () {
       this.isEditMode = false;
     },
     editedTodo () {
+      if(this.todo.title !== this.editedTitle)
+        this.updateTodo({
+          title: this.editedTitle,
+          updatedAt: new Date()
+        });
 
+      this.offEditMode();
     },
     deleteTodo (value) {
       this.$emit('delete-todo', this.todo, value)
@@ -92,3 +107,22 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.todo-item {
+  margin-bottom:10px;
+
+  .item__inner {
+    display: flex;
+  }
+  .item__date {
+    font-size: 12px;
+  }
+  &.done {
+    .item__title-wrap {
+      text-decoration: line-through;
+    }
+  }
+
+}
+</style>
