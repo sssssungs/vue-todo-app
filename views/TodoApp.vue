@@ -65,8 +65,8 @@ import _find from 'lodash/find';
 import _assign from 'lodash/assign';
 import _findIndex from 'lodash/findIndex';
 import cryptoRandomString from 'crypto-random-string';
-import TodoCreator from './TodoCreator';
-import TodoItem from './TodoItem';
+import TodoCreator from '@/components/TodoCreator';
+import TodoItem from '@/components/TodoItem';
 import dayjs from 'dayjs';
 import scrollTo from 'scroll-to';
 
@@ -207,5 +207,5 @@ export default {
 }
 </script>
 <style lang="scss">
-  @import '../scss/style';
+  @import 'scss/style';
 </style>

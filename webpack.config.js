@@ -11,7 +11,11 @@ module.exports = (env, opts) => {
   const config = {
     // 중복되는옵션
     resolve: {
-      extensions: ['.vue', '.js']
+      extensions: ['.vue', '.js'],
+      alias: {
+        '@':path.join(__dirname),
+        'scss': path.join(__dirname, './scss')
+      }
     },
     entry: { // 진입점
       app: [
