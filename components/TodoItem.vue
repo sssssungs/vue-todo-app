@@ -1,63 +1,91 @@
 <template>
-  <div 
+  <div
+    :class="{ done }"
     class="todo-item"
-    :class="{ done }">
-    <div 
+  >
+    <!-- EDIT -->
+    <div
+      v-if="isEditMode"
       class="item__inner item--edit"
-      v-if="isEditMode">
-      <input 
-        type="text" 
+    >
+      <input
         ref="titleInput"
-        :value="editedTitle" 
-        @input="editedTitle=$event.target.value"
-        @keypress.enter="editedTodo"
-        @keypress.esc="offEditMode" />
+        :value="editedTitle"
+        type="text"
+        @input="editedTitle = $event.target.value"
+        @keydown.enter="editedTodo"
+        @keydown.esc="offEditMode"
+      />
       <div class="item__actions">
-        <button 
-          key="complete" 
-          @click="editedTodo">완료</button>
-        <button 
+        <button
+          class="btn btn--primary"
+          key="complete"
+          @click="editedTodo"
+        >
+          <i class="material-icons">done</i>
+        </button>
+        <button
+          class="btn"
           key="cancel"
-          @click="offEditMode">취소</button>
+          @click="offEditMode"
+        >
+          <i class="material-icons">clear</i>
+        </button>
       </div>
     </div>
-    <div 
+
+    <!-- NORMAL -->
+    <div
+      v-else
       class="item__inner item--normal"
-      v-else >
-      <input 
-        type="checkbox" 
-        v-model="done"
-      />
+    >
+      <label>
+        <input
+          v-model="done"
+          type="checkbox"
+        />
+        <span class="icon"><i class="material-icons">check</i></span>
+      </label>
       <div class="item__title-wrap">
-        <div class="item_title">
-          {{ todo.title }}
+        <div
+          class="item__title"
+          @dblclick="onEditMode">{{ todo.title }}</div>
+        <div class="item__date">
+          {{ date }}
         </div>
       </div>
-      <div class="item__date">
-        {{ date }}
-      </div>
       <div class="item__actions">
-        <button 
+        <button
+          class="btn"
           key="update"
-          @click="onEditMode">수정</button>
-        <button 
-          key="delete" 
-          @click="deleteTodo">삭제</button>
+          @click="onEditMode"
+        >
+          <i class="material-icons">edit</i>
+        </button>
+        <button
+          class="btn btn--danger"
+          key="delete"
+          @click="deleteTodo"
+        >
+          <i class="material-icons">delete</i>
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
+
 export default {
+  name: 'TodoItem',
   props: {
     todo: Object
   },
   data () {
     return {
       isEditMode: false,
-      editedTitle: ''
+      editedTitle: this.todo.title
     }
   },
   computed: {
@@ -72,57 +100,44 @@ export default {
       }
     },
     date () {
-      const created = dayjs(this.todo.createdAt).format('YYYY/MM/DD');
-      const isSame = dayjs(this.todo.createdAt).isSame(dayjs(this.todo.updatedAt));
-      return isSame ? created : `${created} (edited)`;
+      const date = dayjs(this.todo.createdAt)
+      const isSame = date.isSame(this.todo.updatedAt)
+      if (isSame) {
+        return date.format('YYYY년 MM월 DD일')
+      } else {
+        return `${date.format('YYYY년 MM월 DD일')} (edited)`
+      }
     }
   },
   methods: {
-    updateTodo (value) {
-      this.$emit('update-todo', this.todo, value)
-    },
     onEditMode () {
-      this.isEditMode = true; //!this.isEditMode
-      this.editedTitle = this.todo.title;
-      // dom 이 렌더링 된 다음에 실행이 되는것을 보장
+      this.editedTitle = this.todo.title
+      this.isEditMode = true
+      // Vue.js가 데이터 변경 후 DOM 업데이트를 마칠 때까지 기다림.
       this.$nextTick(() => {
-        this.$refs.titleInput.focus();
+        this.$refs.titleInput.focus()
       })
     },
     offEditMode () {
-      this.isEditMode = false;
+      this.isEditMode = false
     },
     editedTodo () {
-      if(this.todo.title !== this.editedTitle)
+      // 수정한 내용이 있는 경우만 저장!
+      if (this.todo.title !== this.editedTitle) {
         this.updateTodo({
           title: this.editedTitle,
           updatedAt: new Date()
-        });
-
-      this.offEditMode();
+        })
+      }
+      // 수정 모드 종료.
+      this.offEditMode()
     },
-    deleteTodo (value) {
-      this.$emit('delete-todo', this.todo, value)
+    updateTodo (value) {
+      this.$emit('update-todo', this.todo, value)
+    },
+    deleteTodo () {
+      this.$emit('delete-todo', this.todo)
     }
   }
 }
 </script>
-
-<style scoped lang="scss">
-.todo-item {
-  margin-bottom:10px;
-
-  .item__inner {
-    display: flex;
-  }
-  .item__date {
-    font-size: 12px;
-  }
-  &.done {
-    .item__title-wrap {
-      text-decoration: line-through;
-    }
-  }
-
-}
-</style>

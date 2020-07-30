@@ -1,8 +1,8 @@
 <template>
   <div>
-    <button
-      @click="createTodo"
-    >추가</button>
+    <button  @click="createTodo">
+      <i class="material-icons">add</i>
+    </button>
     <input 
       :value="title"
       :placeholder="placeholder"
@@ -31,6 +31,9 @@ export default {
         this.title = this.title.trim();
         this.$emit('create-todo-from-child', this.title);
         this.resetTitle();
+        this.$nextTick(() => {
+          window.scrollTo(0, document.body.scrollHeight)
+        })
       } else {
         alert('todo 를 입력하시오');
       }

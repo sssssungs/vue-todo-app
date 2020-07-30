@@ -13,12 +13,30 @@
           :class="{ active: filter === 'complete' }"
           @click="showList('complete')">Complete ({{completed}})</button>
       </div>
-      <div class="actions">
-        <input 
+      <div class="actions clearfix">
+        <div class="float--left">
+          <label>
+          <input 
           type="checkbox" 
           v-model="allDone" />
-        <button
-          @click="deleteComplete">완료항목 삭제</button>
+          <span class="icon">
+            <i class="material-icons">done_all</i>
+          </span>
+          </label>
+        </div>
+        <div class="float--right clearfix">
+          <button class="btn float--left" @click="scrollTop">
+            <i class="material-icons">expand_less</i>
+          </button>
+          <button class="btn float--left" @click="scrollBottom">
+            <i class="material-icons">expand_more</i>
+          </button>
+          <button
+            class="btn btn--danger float--left"
+            @click="deleteComplete">
+            <i class="material-icons">delete_sweep</i>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -32,7 +50,6 @@
       />
     </div>
 
-    <hr />
     <todo-creator
       class="todo-app__creator"
       @create-todo-from-child="createTodo"
@@ -51,6 +68,7 @@ import cryptoRandomString from 'crypto-random-string';
 import TodoCreator from './TodoCreator';
 import TodoItem from './TodoItem';
 import dayjs from 'dayjs';
+import scrollTo from 'scroll-to';
 
 export default {
   components: {
@@ -176,19 +194,18 @@ export default {
         .remove({done:true})
         .write();
       this.todos = this.todos.filter(v => v.done !== true)
+    },
+    scrollTop () {
+      scrollTo(0, 0)
+    },
+    scrollBottom () {
+      scrollTo(0, document.body.scrollHeight)
+
     }
   },
 
 }
 </script>
-<style scoped lang="scss">
-.todo-app {
-  .todo-app__actions {
-    .filters {
-      button.active {
-        font-weight: bold;
-      }
-    }
-  }
-}
+<style lang="scss">
+  @import '../scss/style';
 </style>
