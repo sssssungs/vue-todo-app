@@ -1,17 +1,19 @@
 <template>
   <div class="todo-app">
-
     <div class="todo-app__actions">
       <div class="filters">
-        <button
-          :class="{ active: filter === 'all' }"
-          @click="showList('all')">모든항목 ({{all}})</button>
-        <button
-          :class="{ active: filter === 'active' }"
-          @click="showList('active')">Todo ({{todo}})</button>
-        <button
-          :class="{ active: filter === 'complete' }"
-          @click="showList('complete')">Complete ({{completed}})</button>
+        <router-link
+          to="all" 
+          tag="button"
+          >모든항목 ({{all}})</router-link>
+        <router-link
+          to="active" 
+          tag="button"
+          >Todo ({{todo}})</router-link>
+        <router-link
+          to="complete" 
+          tag="button"
+          >Complete ({{completed}})</router-link>
       </div>
       <div class="actions clearfix">
         <div class="float--left">
@@ -78,7 +80,7 @@ export default {
     return {
       db: null,
       todos: [],
-      filter: 'all',
+      // filter: 'all',
       // allDone: false
     }
   },
@@ -102,7 +104,7 @@ export default {
       }
     },
     filteredTodo () {
-      switch(this.filter) {
+      switch(this.$route.params.id) {
         case 'all':
           return this.todos
         case 'active':
@@ -178,9 +180,9 @@ export default {
       this.$delete(this.todos, _findIndex(this.todos, {id: todo.id}))
       // this.todos = this.todos.filter(v => v.id !== todo.id);
     },
-    showList (button) {
-      this.filter = button;
-    },
+    // showList (button) {
+    //   this.filter = button;
+    // },
     completedAll (checked) {
       const newTodos = this.db
         .get('todos')
@@ -208,4 +210,8 @@ export default {
 </script>
 <style lang="scss">
   @import 'scss/style';
+  .filters button.router-link-active {
+    background: royalblue;
+    color: white;
+  }
 </style>
