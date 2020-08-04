@@ -125,22 +125,6 @@ export default {
     }
   },
   methods: {
-    initDB () {
-      const adapter = new LocalStorage('todo-app');
-      //local db init
-      this.db = lowdb(adapter);
-      
-      const hasTodos = this.db.has('todos').value();
-      // console.log(hasTodos)
-      
-      if (hasTodos) {
-        this.todos = _cloneDeep(this.db.getState().todos);
-      } else {
-        this.db.defaults({
-          todos: []
-        }).write();
-      }
-    },
     //create new todo
     createTodo (title) {
       const newTodo = {
