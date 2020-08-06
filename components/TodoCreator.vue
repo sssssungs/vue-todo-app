@@ -1,12 +1,12 @@
 <template>
   <div>
-    <button  @click="createTodo">
+    <button @click="createTodo">
       <i class="material-icons">add</i>
     </button>
-    <input 
+    <input
       :value="title"
       :placeholder="placeholder"
-      type="text" 
+      type="text"
       @input="title=$event.target.value"
       @keypress.enter="createTodo"
       />
@@ -23,19 +23,23 @@ export default {
   },
   methods: {
     resetTitle () {
-      this.title = '';
-      this.placeholder = 'Enter todo';
+      this.title = ''
+      this.placeholder = 'Enter todo'
     },
     createTodo () {
-      if(this.title.length && this.title.trim().length){
-        this.title = this.title.trim();
-        this.$emit('create-todo-from-child', this.title);
-        this.resetTitle();
+      if (this.title.length && this.title.trim().length) {
+        this.title = this.title.trim()
+
+        // actions 접근시 dispatch, mutation 접근시 commit
+        this.$store.dispatch('todoApp/createTodo', this.title)
+        // this.$emit('create-todo-from-child', this.title);
+
+        this.resetTitle()
         this.$nextTick(() => {
           window.scrollTo(0, document.body.scrollHeight)
         })
       } else {
-        alert('todo 를 입력하시오');
+        alert('todo 를 입력하시오')
       }
     }
   }

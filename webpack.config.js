@@ -13,7 +13,7 @@ module.exports = (env, opts) => {
     resolve: {
       extensions: ['.vue', '.js'],
       alias: {
-        '@':path.join(__dirname),
+        '@': path.join(__dirname),
         'scss': path.join(__dirname, './scss')
       }
     },
