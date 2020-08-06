@@ -11,10 +11,10 @@
 
 <script>
 export default {
-  created () {
-    console.log('router', this.$router)
-    console.log('route', this.$route)
-  }
+  // created () {
+  //   console.log('router', this.$router)
+  //   console.log('route', this.$route)
+  // }
 }
 </script>
 
