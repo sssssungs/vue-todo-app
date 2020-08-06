@@ -76,33 +76,10 @@ export default {
   components: {
     TodoItem, TodoCreator
   },
-  data () {
-    return {
-      db: null,
-      todos: [],
-      // filter: 'all',
-      // allDone: false
-    }
-  },
   created() {
     this.initDB();
   },
   computed: {
-    all: {
-      get () {
-        return this.todos.length
-      }
-    },
-    todo: {
-      get () {
-        return this.todos.filter(v => v.done === false).length
-      }
-    },
-    completed: {
-      get () {
-        return this.todos.filter(v => v.done === true).length
-      }
-    },
     filteredTodo () {
       switch(this.$route.params.id) {
         case 'all':
