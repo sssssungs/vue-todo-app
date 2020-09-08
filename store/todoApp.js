@@ -10,7 +10,7 @@ import _forEachRight from 'lodash/forEachRight'
 
 export default {
   namespaced: true, // 모듈화시 필수 - 독립적으로 관리하겠다.
-  state: () => ({ // 참조관계 안되도록 함수형태로 리턴한다
+  state: () => ({ // 참조관계 안되도록 함수형태로 리턴한다 ㅌㅔ스트.
     db: null,
     todos: [],
     filter: 'all'
@@ -128,7 +128,7 @@ export default {
       const newTodos = state.db
         .get('todos')
         .forEach(v => { commit('updateTodo', { todo: v, key: 'done', value: checked }) })
-        .write();
+        .write()
 
       commit('assignTodos', _cloneDeep(newTodos))
       // state.todos = _cloneDeep(newTodos)

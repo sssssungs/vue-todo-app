@@ -6,7 +6,7 @@
         About
       </router-link>
       <router-link to="/todos" tag="h2">
-        Todo App
+        Todo Apps
       </router-link>
     </div>
   </section>
